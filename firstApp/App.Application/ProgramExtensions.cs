@@ -1,4 +1,4 @@
-﻿using App.Application.Common.Behavior;
+﻿//using App.Application.Common.Behavior;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +14,7 @@ public static class ProgramExtensions
 
         // Load Fluent validator using a type reference rather than the generic.
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         return services;
     }
