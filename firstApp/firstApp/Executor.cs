@@ -34,7 +34,7 @@ public class Executor
         {
             var todosFromUsersQuery = new GetTodosFromUsersQuery(MinNumberOfPost: 3);
 
-            await _sender.Send(todosFromUsersQuery, new CancellationToken());
+            var response = await _sender.Send(todosFromUsersQuery, new CancellationToken());
         }
         catch (Exception e)
         {

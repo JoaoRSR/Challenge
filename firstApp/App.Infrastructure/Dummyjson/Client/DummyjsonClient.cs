@@ -36,9 +36,7 @@ public class DummyjsonClient : IDummyjsonClient
 
     public async Task<IReadOnlyList<TodoData>> GetAllTodosAsync(int userID, CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest($"{_configuration.TodoDataEndpoint}/filter")
-            .AddParameter("key", "userId")
-            .AddParameter("value", userID)
+        var request = new RestRequest($"{_configuration.TodoDataEndpoint}/user/{userID}")
             .AddParameter("limit", "0");
 
         var response = await _client.GetAsync<TodoResponse>(request, cancellationToken);

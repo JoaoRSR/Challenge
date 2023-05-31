@@ -22,14 +22,13 @@ public class GetTodosFromUsersHandler : IRequestHandler<GetTodosFromUsersQuery, 
 
         // 1 - get users with more than 2 posts:
         var userIdsFromTodos = await _dataService.GetAllUserIDsFromTodosAsync(cancellationToken);
-        var uniqueUserIds = userIdsFromTodos.Distinct();
+        var uniqueUserIds = userIdsFromTodos.Select(u => u.Id).Distinct();
 
         foreach (var item in uniqueUserIds)
         {
-            if (userIdsFromTodos.Count(u => u.Id == item.Id) > request.MinNumberOfPost)
+            if (userIdsFromTodos.Count(u => u.Id == item) > request.MinNumberOfPost)
             {
-                
-                response.AddRange(await _dataService.GetAllTodosAsync(item.Id, cancellationToken));
+                response.AddRange(await _dataService.GetAllTodosAsync(item, cancellationToken));
             }
         }
 
