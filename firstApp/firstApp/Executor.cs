@@ -1,4 +1,5 @@
-﻿using App.Application.Database.Command;
+﻿using App.Application.Data.Queries;
+using App.Application.Database.Command;
 using MediatR;
 
 namespace firstApp;
@@ -16,16 +17,28 @@ public class Executor
     {
         try
         {
-            var createDbTableWithSpecificDataCommand = new CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagCommand();
+            var createDbTableWithSpecificDataCommand = 
+                new CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagCommand(
+                    containingPostTag: "history", 
+                    MinimumOfPostReactions: 1);
 
             await _sender.Send(createDbTableWithSpecificDataCommand, new CancellationToken());
-            Console.WriteLine($"Database table created succesfully.");
+            Console.WriteLine($"Database table created successfully.");
         }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to create database table: {e.Message}");
         }
 
-        Console.WriteLine("todo");
+        try
+        {
+            var todosFromUsersQuery = new GetTodosFromUsersQuery(MinNumberOfPost: 3);
+
+            await _sender.Send(todosFromUsersQuery, new CancellationToken());
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Failed to get todos: {e.Message}");
+        }
     }
 }

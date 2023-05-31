@@ -1,10 +1,12 @@
 ﻿using App.Application.Interfaces;
 using App.Domain.Data;
 using MediatR;
+using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace App.Application.Database.Command;
 
-public record CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagCommand()
+public record CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagCommand(string containingPostTag = "", int MinimumOfPostReactions = 0)
  : IRequest<Unit>;
 
 public class CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagHandler : IRequestHandler<CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagCommand, Unit>
@@ -13,37 +15,45 @@ public class CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagHandle
     private readonly IRepositoryService _repositoryService;
 
     public CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagHandler(
-        //IRepositoryService repositoryService, 
+        IRepositoryService repositoryService,
         IDataService dataService)
     {
-        //_repositoryService = repositoryService;
+        _repositoryService = repositoryService;
         _dataService = dataService;
     }
 
     public async Task<Unit> Handle(CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagCommand request, CancellationToken cancellationToken)
     {
-        IEnumerable<Posts> userDataResponse;
+        //1 - search posts with reactions and having history tag:
+        var posts = await _dataService.GetAllPostsAsync(cancellationToken);
+        var userIdsFromTodos = await _dataService.GetAllUserIDsFromTodosAsync(cancellationToken);
 
-        try
+        var selectedUserIds = posts
+            .Where(p => p.Reactions >= request.MinimumOfPostReactions)
+            .Where(p => string.IsNullOrEmpty(request.containingPostTag) ? true : p.Tags.Contains(request.containingPostTag))
+            .Select(x => x.UserId)
+            .Distinct();
+
+        var allUsersActivity = new List<UsersActivityCount>();
+
+        //2 - Prepare data to be written to db
+        foreach (var userId in selectedUserIds)
         {
-            userDataResponse = await _dataService.GetAllPostsAsync(cancellationToken);
-            var userDataResponse2 = await _dataService.GetAllTodosAsync(cancellationToken);
-            var userDataResponse3 = await _dataService.GetAllUsersWithCardTypeAsync("mastercard", cancellationToken);
-        }
-        catch (Exception e)
-        {
-            throw new Exception($"Failed to retrive user data at {nameof(CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagHandler)}: {e.Message}");
+            var postsNumber = posts.Count(p => p.UserId == userId);
+            var todosNumber = userIdsFromTodos.Count(p => p.Id == userId);
+
+            var userActivity = new UsersActivityCount()
+            {
+                Id = userId,
+                NumberOfPosts = postsNumber,
+                NumberofTodos = todosNumber,
+            };
+
+            allUsersActivity.Add(userActivity);
         }
 
-        try
-        {
-            //await _repositoryService.CreateTableToDatabaseAsync(userDataResponse, cancellationToken);
-            ;
-        }
-        catch (Exception e)
-        {
-            throw new Exception($"Failed to create table to database at {nameof(CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagHandler)}: {e.Message}.");
-        }
+        //4 - write to db
+        await _repositoryService.AddOrCreateUsersActivityCountToDatabaseAsync(allUsersActivity);
 
         return Unit.Value;
     }

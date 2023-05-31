@@ -4,31 +4,37 @@ using MediatR;
 
 namespace App.Application.Data.Queries;
 
-public record GetTodosFromUsersWithMoreThanSearchCriteriaQuery()
+public record GetTodosFromUsersQuery(int MinNumberOfPost = 0)
  : IRequest<IEnumerable<Todos>>;
 
-//public class GetUserDataHavingPostWithReactionsAndHistoryTagHandler : IRequestHandler<GetUserDataHavingPostWithReactionsAndHistoryTagQuery, IEnumerable<UserData>>
-//{
-//    private readonly IDataService _dataService;
+public class GetTodosFromUsersHandler : IRequestHandler<GetTodosFromUsersQuery, IEnumerable<Todos>>
+{
+    private readonly IDataService _dataService;
 
-//    public GetUserDataHavingPostWithReactionsAndHistoryTagHandler(IDataService dataService)
-//    {
-//        _dataService = dataService;
-//    }
+    public GetTodosFromUsersHandler(IDataService dataService)
+    {
+        _dataService = dataService;
+    }
 
-//    public async Task<IEnumerable<UserData>> Handle(GetUserDataHavingPostWithReactionsAndHistoryTagQuery request, CancellationToken cancellationToken)
-//    {
-//        IEnumerable<UserData> response;
+    public async Task<IEnumerable<Todos>> Handle(GetTodosFromUsersQuery request, CancellationToken cancellationToken)
+    {
+        var response = new List<Todos>();
 
-//        try
-//        {
-//            response = await _dataService.GetUserDataHavingPostWithReactionsAndHistoryTagAsync(cancellationToken);
-//        }
-//        catch (Exception e)
-//        {
-//            throw new Exception($"Failed to retrive user data at {nameof(GetUserDataHavingPostWithReactionsAndHistoryTagHandler)}: {e.Message}");
-//        }
+        // 1 - get users with more than 2 posts:
+        var userIdsFromTodos = await _dataService.GetAllUserIDsFromTodosAsync(cancellationToken);
+        var uniqueUserIds = userIdsFromTodos.Distinct();
 
-//        return response;
-//    }
-//}
+        foreach (var item in uniqueUserIds)
+        {
+            if (userIdsFromTodos.Count(u => u.Id == item.Id) > request.MinNumberOfPost)
+            {
+                
+                response.AddRange(await _dataService.GetAllTodosAsync(item.Id, cancellationToken));
+            }
+        }
+
+        // 2 - get those users todos
+
+        return response;
+    }
+}

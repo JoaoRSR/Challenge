@@ -41,6 +41,29 @@ internal class DataService : IDataService
         });
     }
 
+    public async Task<IEnumerable<Todos>> GetAllTodosAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        IReadOnlyList<TodoData> result = await _dummyjsonClient.GetAllTodosAsync(userId, cancellationToken);
+
+        return result.Select(x => new Todos()
+        {
+            Id = x.Id,
+            Todo = x.Todo,
+            Completed = x.Completed,
+            UserId = x.UserId,
+        });
+    }
+
+    public async Task<IEnumerable<Users>> GetAllUserIDsFromTodosAsync(CancellationToken cancellationToken = default)
+    {
+        IReadOnlyList<TodoData> result = await _dummyjsonClient.GetAllTodosAsync(cancellationToken);
+
+        return result.Select(x => new Users()
+        {
+            Id = x.UserId,
+        });
+    }
+
     public async Task<IEnumerable<Users>> GetAllUsersWithCardTypeAsync(string cardType, CancellationToken cancellationToken = default)
     {
         IReadOnlyList<UserData> result = await _dummyjsonClient.GetAllUsersIDByCardTypeInformationAsync(cardType, cancellationToken);

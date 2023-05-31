@@ -1,6 +1,7 @@
 ﻿using App.Infrastructure.Dummyjson.Configurations;
 using App.Infrastructure.Dummyjson.Models.Responses;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualBasic;
 using RestSharp;
 
 namespace App.Infrastructure.Dummyjson.Client;
@@ -29,6 +30,18 @@ public class DummyjsonClient : IDummyjsonClient
     public async Task<IReadOnlyList<TodoData>> GetAllTodosAsync(CancellationToken cancellationToken = default)
     {
         var response = await GetAllGenericAsync<TodoResponse>(_configuration.TodoDataEndpoint, cancellationToken);
+
+        return response.Todos;
+    }
+
+    public async Task<IReadOnlyList<TodoData>> GetAllTodosAsync(int userID, CancellationToken cancellationToken = default)
+    {
+        var request = new RestRequest($"{_configuration.TodoDataEndpoint}/filter")
+            .AddParameter("key", "userId")
+            .AddParameter("value", userID)
+            .AddParameter("limit", "0");
+
+        var response = await _client.GetAsync<TodoResponse>(request, cancellationToken);
 
         return response.Todos;
     }

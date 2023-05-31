@@ -1,6 +1,6 @@
 ﻿namespace App.Domain.Data;
 
-public class UserInformation
+public class UsersActivityCount
 {
     public int Id { get; set; }
     public int NumberOfPosts { get; set; }

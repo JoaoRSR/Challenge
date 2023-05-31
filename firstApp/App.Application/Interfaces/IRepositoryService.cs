@@ -4,5 +4,5 @@ namespace App.Application.Interfaces;
 
 public interface IRepositoryService
 {
-    Task CreateTableToDatabaseAsync(IEnumerable<UserInformation> userData, CancellationToken cancellationToken = default);
+    Task AddOrCreateUsersActivityCountToDatabaseAsync(IEnumerable<UsersActivityCount> data, CancellationToken cancellationToken = default);
 }
