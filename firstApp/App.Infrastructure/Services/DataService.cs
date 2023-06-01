@@ -27,21 +27,13 @@ internal class DataService : IDataService
         });
     }
 
-    public async Task<IEnumerable<Posts>> GetAllPostsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<int>> GetAllUserIDFromPostsAsync(CancellationToken cancellationToken = default)
     {
-        IReadOnlyList<PostData> result = await _dummyjsonClient.GetAllPostsAsync(cancellationToken);
+        IReadOnlyList<PostData> result = await _dummyjsonClient.GetAllUserIdFromPostsAsync(cancellationToken);
 
-        return result.Select(x => new Posts()
-        {
-            Id = x.Id,
-            Title = x.Title,
-            Body = x.Body,
-            UserId = x.UserId,
-            Tags = (string[])x.Tags.Clone(),
-            Reactions = x.Reactions,
-        });
+        return result.Select(x => x.UserId);
     }
-
+   
     public async Task<IEnumerable<Posts>> GetAllPostsAsync(int userId, CancellationToken cancellationToken = default)
     {
         IReadOnlyList<PostData> result = await _dummyjsonClient.GetAllPostsAsync(userId, cancellationToken);

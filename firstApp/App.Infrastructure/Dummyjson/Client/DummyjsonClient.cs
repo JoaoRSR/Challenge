@@ -31,9 +31,13 @@ public class DummyjsonClient : IDummyjsonClient
         return response.Posts;
     }
 
-    public async Task<IReadOnlyList<PostData>> GetAllPostsAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<PostData>> GetAllUserIdFromPostsAsync(CancellationToken cancellationToken = default)
     {
-        var response = await GetAllGenericAsync<PostResponse>(_configuration.PostDataEndpoint, cancellationToken);
+        var request = new RestRequest($"{_configuration.PostDataEndpoint}")
+            .AddParameter("select", "userId")
+            .AddParameter("limit", "0");
+
+        var response = await _client.GetAsync<PostResponse>(request, cancellationToken);
 
         return response.Posts;
     }
