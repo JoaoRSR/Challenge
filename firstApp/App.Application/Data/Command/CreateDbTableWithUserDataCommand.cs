@@ -1,20 +1,18 @@
 ﻿using App.Application.Interfaces;
-using App.Domain.Data;
+using App.Domain.Data.Requests;
 using MediatR;
-using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
-namespace App.Application.Database.Command;
+namespace App.Application.Data.Command;
 
-public record CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagCommand(string containingPostTag = "", int MinimumOfPostReactions = 0)
+public record CreateDbTableWithUserDataCommand(string containingPostTag = "", int MinimumOfPostReactions = 0)
  : IRequest<Unit>;
 
-public class CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagHandler : IRequestHandler<CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagCommand, Unit>
+public class CreateDbTableWithUserDataHandler : IRequestHandler<CreateDbTableWithUserDataCommand, Unit>
 {
     private readonly IDataService _dataService;
     private readonly IRepositoryService _repositoryService;
 
-    public CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagHandler(
+    public CreateDbTableWithUserDataHandler(
         IRepositoryService repositoryService,
         IDataService dataService)
     {
@@ -22,29 +20,29 @@ public class CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagHandle
         _dataService = dataService;
     }
 
-    public async Task<Unit> Handle(CreateDbTableWithUserDataHavingPostWithReactionsAndHistoryTagCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(CreateDbTableWithUserDataCommand request, CancellationToken cancellationToken)
     {
         //1 - search posts with reactions and having history tag:
-        var posts = await _dataService.GetAllPostsAsync(cancellationToken);
+        var posts = await _dataService.GetAllPostsTagsAndReactionsAsync(cancellationToken);
         var userIdsFromTodos = await _dataService.GetAllUserIDsFromTodosAsync(cancellationToken);
 
         var selectedUserIds = posts
             .Where(p => p.Reactions >= request.MinimumOfPostReactions)
-            .Where(p => string.IsNullOrEmpty(request.containingPostTag) ? true : p.Tags.Contains(request.containingPostTag))
+            .Where(p => string.IsNullOrEmpty(request.containingPostTag) || p.Tags.Contains(request.containingPostTag))
             .Select(x => x.UserId)
             .Distinct();
 
+        //2 - Prepare data to be written to db
         var allUsersActivity = new List<UsersActivityCount>();
 
-        //2 - Prepare data to be written to db
         foreach (var userId in selectedUserIds)
         {
             var postsNumber = posts.Count(p => p.UserId == userId);
-            var todosNumber = userIdsFromTodos.Count(p => p.Id == userId);
+            var todosNumber = userIdsFromTodos.Count(p => p == userId);
 
             var userActivity = new UsersActivityCount()
             {
-                Id = userId,
+                UserId = userId,
                 NumberOfPosts = postsNumber,
                 NumberofTodos = todosNumber,
             };

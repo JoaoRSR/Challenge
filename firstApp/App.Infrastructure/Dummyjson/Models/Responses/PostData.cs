@@ -2,8 +2,11 @@
 
 namespace App.Infrastructure.Dummyjson.Models.Responses;
 
-public class PostData : UserData
-{
+public class PostData
+{ 
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
     [JsonPropertyName("title")]
     public string Title { get; set; }
 

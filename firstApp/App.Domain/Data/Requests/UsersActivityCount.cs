@@ -1,8 +1,8 @@
-﻿namespace App.Domain.Data;
+﻿namespace App.Domain.Data.Requests;
 
 public class UsersActivityCount
 {
-    public int Id { get; set; }
+    public int UserId { get; set; }
     public int NumberOfPosts { get; set; }
     public int NumberofTodos { get; set; }
 }

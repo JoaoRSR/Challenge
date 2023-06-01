@@ -11,5 +11,7 @@ public class ChallengeDbContext : DbContext
 
     public DbSet<UsersActivityCountEntity> UsersActivityCount { get; set; }
 
+    public DbSet<PostsEntity> Posts { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder) => base.OnModelCreating(modelBuilder);
 }

@@ -2,8 +2,11 @@
 
 namespace App.Infrastructure.Dummyjson.Models.Responses;
 
-public class TodoData : UserData
+public class TodoData
 {
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
     [JsonPropertyName("todo")]
     public string Todo { get; set; }
 
