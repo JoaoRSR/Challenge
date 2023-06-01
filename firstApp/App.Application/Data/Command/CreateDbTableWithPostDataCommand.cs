@@ -39,14 +39,14 @@ public class CreateDbTableWithPostDataHandler : IRequestHandler<CreateDbTableWit
             postsToSave.AddRange(
                 posts.Where(p => p.UserId == item)
                      .Select(p => new PostsToSave()
-                        {
-                            Id = p.Id,
-                            UserId = p.UserId,
-                            UserName = userName,
-                            HasFictionTag = p.Tags.Contains("fiction"), //in this case it doesn't make sense to have this as input because this is part of the database
-                            HasFrenchTag = p.Tags.Contains("french"),
-                            HasMoreThanTwoReactions = p.Reactions > 2,
-                        }));
+                     {
+                         Id = p.Id,
+                         UserId = p.UserId,
+                         UserName = userName,
+                         HasFictionTag = p.Tags.Contains("fiction"), //in this case it doesn't make sense to have this as input because this is part of the database
+                         HasFrenchTag = p.Tags.Contains("french"),
+                         HasMoreThanTwoReactions = p.Reactions > 2,
+                     }));
         }
 
         //4 - write to db

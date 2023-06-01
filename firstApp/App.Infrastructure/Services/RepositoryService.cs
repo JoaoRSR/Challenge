@@ -1,8 +1,6 @@
 ﻿using App.Application.Interfaces;
 using App.Domain.Data.Requests;
 using App.Infrastructure.PostgresSQL.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Data.Entity;
 
 namespace App.Infrastructure.Services;
 

@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace App.Domain.Data.Responses;
+﻿namespace App.Domain.Data.Responses;
 
 public class Todos
 {

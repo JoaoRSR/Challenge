@@ -2,9 +2,9 @@
 using App.Domain.Data.Responses;
 using App.Infrastructure.Dummyjson.Client;
 using App.Infrastructure.Dummyjson.Models.Responses;
-using System.Collections.Generic;
 
 namespace App.Infrastructure.Services;
+
 internal class DataService : IDataService
 {
     private readonly IDummyjsonClient _dummyjsonClient;
@@ -33,7 +33,7 @@ internal class DataService : IDataService
 
         return result.Select(x => x.UserId);
     }
-   
+
     public async Task<IEnumerable<Posts>> GetAllPostsAsync(int userId, CancellationToken cancellationToken = default)
     {
         IReadOnlyList<PostData> result = await _dummyjsonClient.GetAllPostsAsync(userId, cancellationToken);

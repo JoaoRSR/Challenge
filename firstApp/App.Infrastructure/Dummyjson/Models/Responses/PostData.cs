@@ -3,7 +3,7 @@
 namespace App.Infrastructure.Dummyjson.Models.Responses;
 
 public class PostData
-{ 
+{
     [JsonPropertyName("id")]
     public int Id { get; set; }
 

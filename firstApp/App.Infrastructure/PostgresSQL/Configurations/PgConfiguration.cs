@@ -8,4 +8,4 @@ public class PgConfiguration
 
     [Required]
     public string ConnectionString { get; init; }
-}   
+}

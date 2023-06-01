@@ -6,8 +6,8 @@ public class UsersActivityCountEntity
 {
     [Key]
     public int UserId { get; set; }
-    
+
     public int TodosNumber { get; set; }
-    
+
     public int PostsNumber { get; set; }
 }

@@ -7,7 +7,7 @@ namespace secondApp;
 
 internal class Program
 {
-    private async static Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
         ServiceCollection? services = new();
         ConfigureServices(services);
@@ -26,9 +26,6 @@ internal class Program
             .AddJsonFile("appsettings.json", optional: false)
             .AddEnvironmentVariables()
             .Build();
-
-        //services
-        //.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
 
         services.AddApplicationLayer();
         services.AddInfrastructureLayer(configuration);

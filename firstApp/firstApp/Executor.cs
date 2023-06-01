@@ -2,7 +2,7 @@
 using App.Application.Data.Queries;
 using MediatR;
 
-namespace secondApp;
+namespace firstApp;
 
 public class Executor
 {
@@ -17,9 +17,9 @@ public class Executor
     {
         try
         {
-            var createDbTableWithDataCommand = 
+            var createDbTableWithDataCommand =
                 new CreateDbTableWithUserDataCommand(
-                    containingPostTag: "history", 
+                    containingPostTag: "history",
                     MinimumOfPostReactions: 1);
 
             await _sender.Send(createDbTableWithDataCommand, new CancellationToken());
