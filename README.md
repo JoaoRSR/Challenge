@@ -12,4 +12,4 @@
   src="/images/posts.png"
   alt="Alt text"
   title="Optional title"
-  style="display: inline-block; margin: 0 auto; max-width: 30px">
+  style="max-width: 30px">
