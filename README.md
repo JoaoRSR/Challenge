@@ -1,6 +1,4 @@
 
-<p><span style="font-size:22px"><strong>Challenge</strong></span></p>
-
 <p>Initial assumptions:&nbsp;</p>
 
 <ul>
