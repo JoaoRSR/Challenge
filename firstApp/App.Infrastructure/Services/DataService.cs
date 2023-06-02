@@ -5,7 +5,7 @@ using App.Infrastructure.Dummyjson.Models.Responses;
 
 namespace App.Infrastructure.Services;
 
-internal class DataService : IDataService
+public class DataService : IDataService
 {
     private readonly IDummyjsonClient _dummyjsonClient;
 
@@ -22,12 +22,12 @@ internal class DataService : IDataService
         {
             Id = x.Id,
             UserId = x.UserId,
-            Tags = (string[])x.Tags.Clone(),
+            Tags = (string[])x.Tags.Clone(),    
             Reactions = x.Reactions,
         });
     }
 
-    public async Task<IEnumerable<int>> GetAllUserIDFromPostsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<int>> GetAllUserIdFromPostsAsync(CancellationToken cancellationToken = default)
     {
         IReadOnlyList<PostData> result = await _dummyjsonClient.GetAllUserIdFromPostsAsync(cancellationToken);
 

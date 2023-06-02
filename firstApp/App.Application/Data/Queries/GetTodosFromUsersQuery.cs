@@ -21,7 +21,7 @@ public class GetTodosFromUsersHandler : IRequestHandler<GetTodosFromUsersQuery, 
         var response = new List<Todos>();
 
         // 1 - get users with more than 2 posts:
-        var userIdsFromPosts = await _dataService.GetAllUserIDFromPostsAsync(cancellationToken);
+        var userIdsFromPosts = await _dataService.GetAllUserIdFromPostsAsync(cancellationToken);
         var uniqueUserIds = userIdsFromPosts.Select(p => p).Distinct();
 
         // 2 - get those users todos

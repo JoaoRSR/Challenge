@@ -42,7 +42,7 @@ public class CreateDbTableWithPostDataHandler : IRequestHandler<CreateDbTableWit
                      {
                          Id = p.Id,
                          UserId = p.UserId,
-                         UserName = userName,
+                         UserName = userName,   
                          HasFictionTag = p.Tags.Contains("fiction"), //in this case it doesn't make sense to have this as input because this is part of the database
                          HasFrenchTag = p.Tags.Contains("french"),
                          HasMoreThanTwoReactions = p.Reactions > 2,
@@ -50,7 +50,7 @@ public class CreateDbTableWithPostDataHandler : IRequestHandler<CreateDbTableWit
         }
 
         //4 - write to db
-        await _repositoryService.AddOrCreatePostsToDatabaseAsync(postsToSave);
+        await _repositoryService.AddOrCreatePostsToDatabaseAsync(postsToSave, cancellationToken);
 
         return Unit.Value;
     }

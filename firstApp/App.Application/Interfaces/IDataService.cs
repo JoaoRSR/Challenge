@@ -10,7 +10,7 @@ public interface IDataService
 
     Task<IEnumerable<Todos>> GetAllTodosAsync(int userId, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<int>> GetAllUserIDFromPostsAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<int>> GetAllUserIdFromPostsAsync(CancellationToken cancellationToken = default);
 
     Task<IEnumerable<int>> GetAllUserIDsFromTodosAsync(CancellationToken cancellationToken = default);
 
