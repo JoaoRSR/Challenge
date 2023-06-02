@@ -11,7 +11,7 @@
 
 <p><strong>Postgres SQL tables:&nbsp;</strong></p>
 
-<p><img alt="" src="images/posts.png" style="width:100px" /> <img alt="" src="images/posts.png" style="width:100px" /></p>
+<p><img alt="" src="images/posts.png" style="width:200px" /> <img alt="" src="images/posts.png" style="width:200px" /></p>
 
 <p>&nbsp;</p>
 
