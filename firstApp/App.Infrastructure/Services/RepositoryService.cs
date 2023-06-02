@@ -15,7 +15,6 @@ public class RepositoryService : IRepositoryService
 
     public async Task AddOrCreateUsersActivityCountToDatabaseAsync(IEnumerable<UsersActivityCount> data, CancellationToken cancellationToken = default)
     {
-        //this can be improved with automapper
         var request = data.Select(item => new UsersActivityCountEntity()
         {
             UserId = item.UserId,
@@ -32,7 +31,7 @@ public class RepositoryService : IRepositoryService
         // Option 2 - we just add the new values and keep what exists in the db
         var existingItems = _context.UsersActivityCount.ToDictionary(x => x.UserId);
 
-        var itemsToAdd = new List<UsersActivityCountEntity>();
+        //if it's not expected the existing data on DB to change much, we could create also an hashset just to ignore existing entries
 
         foreach (var item in request)
         {
@@ -42,17 +41,15 @@ public class RepositoryService : IRepositoryService
             }
             else
             {
-                itemsToAdd.Add(item);
+                await _context.UsersActivityCount.AddAsync(item);
             }
         }
 
-        await _context.UsersActivityCount.AddRangeAsync(itemsToAdd, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task AddOrCreatePostsToDatabaseAsync(IEnumerable<PostsToSave> data, CancellationToken cancellationToken = default)
     {
-        //this can be improved with automapper
         var request = data.Select(item => new PostsEntity()
         {
             Id = item.Id,
@@ -72,7 +69,9 @@ public class RepositoryService : IRepositoryService
         // Option 2 - we just add the new values and keep what exists in the db
         var existingItems = _context.Posts.ToDictionary(x => x.Id);
 
-        var itemsToAdd = new List<PostsEntity>();
+        //if it's not expected the existing data on DB to change much, we could create also an hashset just to ignore existing entries
+
+        var itemsToAdd = new LinkedList<PostsEntity>();
 
         foreach (var item in request)
         {
@@ -82,11 +81,10 @@ public class RepositoryService : IRepositoryService
             }
             else
             {
-                itemsToAdd.Add(item);
+                await _context.Posts.AddAsync(item);
             }
         }
 
-        await _context.Posts.AddRangeAsync(itemsToAdd, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
 }
