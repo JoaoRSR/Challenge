@@ -13,8 +13,14 @@
 
 <p><img alt="" src="images/Posts.png" style="width:200px" /> <img alt="" src="images/Users.png" style="width:200px" /></p>
 
-<p>&nbsp;</p>
+<p><strong>Overall project architecture:&nbsp;</strong></p>
 
-<p>&nbsp;</p>
+<p><img alt="" src="images/Overall.png" style="width:500px" />
 
-<p>&nbsp;</p>
+<ul>
+	<li>App1 and App2 communicates with Application Layer using a mediator pattern.</li>
+	<li>Application defines all logic needed in the program.</li>
+	<li>Application defines Interfaces to interact with external providers.</li>
+	<li>Infrastruture&nbsp;provides the implementations of the interfaces that Application Layer requires.</li>
+	<li>Domain provides all the data models to be used in communications accross the different layers.</li>
+</ul>
