@@ -11,6 +11,7 @@
 
 <p><img alt="" src="images/Posts.png" style="width:200px" /> <img alt="" src="images/Users.png" style="width:200px" /></p>
 
+<p>&nbsp;</p>
 <p><strong>Overall project architecture:&nbsp;</strong></p>
 
 <p><img alt="" src="images/Overall.png" style="width:500px" />
